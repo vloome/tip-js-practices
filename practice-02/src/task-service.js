@@ -1,50 +1,163 @@
-// Заготовка модуля. throw ниже отмечает отсутствие реализации,
-// а не способ обработки некорректных данных в готовом решении.
-// Для предусмотренных ошибок необходимо возвращать { ok: false, error: "..." }.
-// console.log(), prompt(), document и чтение внешнего состояния здесь не нужны.
+"use strict";
 
+/**
+ * 1. Создание новой задачи с валидацией полей
+ */
 export function createTask(id, title, priority = "medium") {
-  // TODO: проверить поля и вернуть результат создания задачи.
-  throw new Error("Не реализовано: createTask");
+  if (!Number.isSafeInteger(id) || id <= 0) {
+    return { ok: false, error: "Некорректный id: должен быть положительным безопасным целым числом" };
+  }
+  if (typeof title !== "string") {
+    return { ok: false, error: "Название должно быть строкой" };
+  }
+  
+  const trimmedTitle = title.trim();
+  if (trimmedTitle.length < 1 || trimmedTitle.length > 100) {
+    return { ok: false, error: "Длина названия должна быть от 1 до 100 символов" };
+  }
+  
+  if (!["low", "medium", "high"].includes(priority)) {
+    return { ok: false, error: "Некорректный приоритет: допустимы low, medium, high" };
+  }
+
+  return {
+    ok: true,
+    task: {
+      id,
+      title: trimmedTitle,
+      completed: false,
+      priority,
+    },
+  };
 }
 
+/**
+ * 2. Поиск задачи по идентификатору
+ */
 export function findTaskById(tasks, id) {
-  // TODO: найти задачу с помощью find(); отсутствие результата — undefined.
-  throw new Error("Не реализовано: findTaskById");
+  return tasks.find((task) => task.id === id);
 }
 
+/**
+ * 3. Получение массива невыполненных задач
+ */
 export function getPendingTasks(tasks) {
-  // TODO: вернуть новый массив невыполненных задач с помощью filter().
-  throw new Error("Не реализовано: getPendingTasks");
+  return tasks.filter((task) => !task.completed);
 }
 
+/**
+ * 4. Получение массива названий всех задач
+ */
 export function getTaskTitles(tasks) {
-  // TODO: вернуть массив названий с помощью map().
-  throw new Error("Не реализовано: getTaskTitles");
+  return tasks.map((task) => task.title);
 }
 
+/**
+ * 5. Расчёт сводной статистики по списку задач
+ */
 export function getTaskStats(tasks) {
-  // TODO: вернуть { total, completed, pending, progress }.
-  throw new Error("Не реализовано: getTaskStats");
+  const total = tasks.length;
+  const completed = tasks.filter((task) => task.completed).length;
+  const pending = total - completed;
+  const progress = total > 0 ? (completed / total) * 100 : 0;
+
+  return {
+    total,
+    completed,
+    pending,
+    progress,
+  };
 }
 
+/**
+ * 6. Добавление задачи в конец нового массива
+ */
 export function addTask(tasks, id, title, priority = "medium") {
-  // TODO: проверить данные через createTask(), исключить дублирование id,
-  // вернуть { ok: true, tasks: новыйМассив } без изменения исходного массива.
-  throw new Error("Не реализовано: addTask");
+  if (tasks.some((task) => task.id === id)) {
+    return { ok: false, error: "Задача с таким id уже существует" };
+  }
+
+  const creationResult = createTask(id, title, priority);
+  if (!creationResult.ok) {
+    return creationResult;
+  }
+
+  return {
+    ok: true,
+    tasks: [...tasks, creationResult.task],
+  };
 }
 
+/**
+ * 7. Изменение статуса выполнения задачи
+ */
 export function setTaskCompleted(tasks, id, completed) {
-  // TODO: проверить id и completed, найти задачу, создать обновлённые данные.
-  throw new Error("Не реализовано: setTaskCompleted");
+  if (typeof completed !== "boolean") {
+    return { ok: false, error: "Статус выполнения (completed) должен быть булевым значением" };
+  }
+
+  const taskExists = tasks.some((task) => task.id === id);
+  if (!taskExists) {
+    return { ok: false, error: "Задача с указанным id не найдена" };
+  }
+
+  const updatedTasks = tasks.map((task) => {
+    if (task.id === id) {
+      return { ...task, completed };
+    }
+    return task;
+  });
+
+  return {
+    ok: true,
+    tasks: updatedTasks,
+  };
 }
 
+/**
+ * 8. Переименование задачи
+ */
 export function renameTask(tasks, id, title) {
-  // TODO: проверить id и title, изменить только название выбранной задачи.
-  throw new Error("Не реализовано: renameTask");
+  if (typeof title !== "string") {
+    return { ok: false, error: "Название должно быть строкой" };
+  }
+
+  const trimmedTitle = title.trim();
+  if (trimmedTitle.length < 1 || trimmedTitle.length > 100) {
+    return { ok: false, error: "Длина нового названия должна быть от 1 до 100 символов" };
+  }
+
+  const taskExists = tasks.some((task) => task.id === id);
+  if (!taskExists) {
+    return { ok: false, error: "Задача с указанным id не найдена" };
+  }
+
+  const updatedTasks = tasks.map((task) => {
+    if (task.id === id) {
+      return { ...task, title: trimmedTitle };
+    }
+    return task;
+  });
+
+  return {
+    ok: true,
+    tasks: updatedTasks,
+  };
 }
 
+/**
+ * 9. Удаление задачи по идентификатору
+ */
 export function removeTask(tasks, id) {
-  // TODO: проверить id, обработать отсутствие задачи, вернуть новый массив.
-  throw new Error("Не реализовано: removeTask");
+  const taskExists = tasks.some((task) => task.id === id);
+  if (!taskExists) {
+    return { ok: false, error: "Задача с указанным id не найдена" };
+  }
+
+  const filteredTasks = tasks.filter((task) => task.id !== id);
+
+  return {
+    ok: true,
+    tasks: filteredTasks,
+  };
 }
