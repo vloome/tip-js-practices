@@ -5,13 +5,13 @@
 * Вариант: 
 
 ## Окружение
-
-* Операционная система: Windows 11
-* Node.js - v24.21.0
-* npm - 12.1.0
-* Git - version 2.55.0.windows.5
-* Браузер Google Chrome
-
+```bash
+Операционная система: Windows 11
+Node.js - v24.21.0
+npm - v12.1.0
+Git - version 2.55.0.windows.5
+Браузер Google Chrome Версия: 154.0.8037.98
+```
 ## Запуск
 
 * node practice-01/js/hello.js
