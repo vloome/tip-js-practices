@@ -1,5 +1,3 @@
-// Указать номер варианта из ПР2–ПР4 и соответствующие фильтры из методички ПР5.
-// Пример: export const variantNumber = 3;
-//         export const variantFilters = { priority: "high" };
-export const variantNumber = null;
-export const variantFilters = {};
+// Вариант 4 из таблицы ПР5: показать задачи среднего приоритета.
+export const variantNumber = 4;
+export const variantFilters = { priority: "medium" };

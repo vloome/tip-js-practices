@@ -6,7 +6,7 @@ const baseUrl = process.env.API_URL ?? "http://127.0.0.1:5505/api";
 
 function describeError(error) {
   if (!(error instanceof ApiError)) {
-    return `Неожиданная ошибка: ${error.message}`;
+    return `Неожиданная ошибка: ${error?.message ?? String(error)}`;
   }
 
   const parts = [`Тип: ${error.kind}`, error.message];
@@ -32,7 +32,7 @@ try {
       ? "Общий контрольный запрос"
       : `Индивидуальный вариант ${variantNumber}`,
   );
-  console.log("Фильтры:", meta.filters);
+  console.log("Фильтры ответа API:", meta.filters);
   console.log(`Получено задач: ${meta.total}; время: ${elapsedMs.toFixed(1)} мс`);
   console.table(tasks.map((task) => ({
     id: task.id,
