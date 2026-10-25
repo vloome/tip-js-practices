@@ -1,7 +1,7 @@
 "use strict";
 
-const totalTasks = 12;
-const completedTasks = 5;
+const totalTasks = 5;
+const completedTasks = 6;
 
 // 1. Проверка на то, что оба значения являются конечными числами
 if (!Number.isFinite(totalTasks) || !Number.isFinite(completedTasks)) {

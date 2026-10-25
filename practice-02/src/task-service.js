@@ -161,3 +161,13 @@ export function removeTask(tasks, id) {
     tasks: filteredTasks,
   };
 }
+
+const demoTasks = [
+  { id: 1, title: 'Изучить основы JavaScript', completed: true, priority: 'high' },
+  { id: 4, title: 'Написать модульные тесты', completed: false, priority: 'medium' },
+  { id: 7, title: 'Настроить сборку проекта', completed: false, priority: 'low' },
+  { id: 10, title: 'Подготовить отчёт', completed: true, priority: 'high' }
+];
+
+console.log("--- Проверка изменения статуса задачи ---");
+console.log(setTaskCompleted(demoTasks, 777, true));
